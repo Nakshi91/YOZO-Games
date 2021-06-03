@@ -1,6 +1,5 @@
-# YOZO-Games
 
-organize
+YOZO-Games
 ========
 
 Organize your Mac filesystem.
