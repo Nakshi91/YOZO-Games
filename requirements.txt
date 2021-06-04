@@ -1,3 +1,9 @@
 numpy == 1.16.1
-opencv_python == 3.4.5.20
+opencv-python == 3.4.5.20
 dlib == 19.16.0
+imutils==0.5.4
+Keras==2.4.3
+h5py==2.10.0
+sklearn==0.0
+tensorflow==2.4.1
+

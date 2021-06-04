@@ -65,24 +65,33 @@ Problem 2 needs multiple AI models. Basically we need models for
 For each of the above models, the base task is face detection. Once we detect a face we can pass it to each of the downstream task. So we can use a single model for face detection and pass it to each of the downstream task.
 There are a lot of open source model for face detection (`MTCNN`, `RetinaFace` etc.) with a good accuracy. For the simplicity of the project and to run the system in near real time using laptop camera I used face detection using `Haar Cascades` from opencv. 
 
-
+##### Demo
 
 ![](img/1.gif)
 ![](img/face_detection.jpg)
 
 
-    cd ~/Projects/$1;
+    $ cd problem2
+    $ python main.py
 
-If you save it as a short name like `p`, you can just do a simple little:
+Following section describe details of each of the models 
+#### Face Liveness Detection using Depth Map Prediction
+This is an application of a combination of Convolutional Neural Networks and Computer Vision to detect
+between actual faces and fake faces in realtime environment. The image frame captured from webcam is passed over a pre-trained model. This model is trained on the depth map of images in the dataset. The depth map generation have been developed from a different CNN model.
 
-    p FOSS
+##### The Convolutional Neural Network
 
-to get to your FOSS project. Ohhh yeahhh!
+The network consists of **3** hidden conlvolutional layers with **relu** as the activation function. Finally it has **1** fully connected layer.
 
-You can even make it autocomplete!
+The network is trained with **10** epochs size with batch size **32**
 
-    #compdef p
-    _files -W ~/Projects -/
+The ratio of training to testing bifuracation is **75:25**
+
+#### Realtime Face Emotion Detection
+
+Realtime Human Emotion Analysis From facial expressions. It uses a deep Convolutional Neural Network. The model used achieved an accuracy of 83% on the test data. The realtime analyzer assigns a suitable emoji for the current emotion.
+### Emojis/Emotion used:
+![](img/neutral.png) ![](img/happy.png) ![](img/fearful.png) ![](img/sad.png) ![](img/angry.png) ![](img/surprised.png) ![](img/disgusted.png)
 
 Copyright
 ---------
