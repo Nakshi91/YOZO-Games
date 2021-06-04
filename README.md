@@ -31,10 +31,12 @@ I think the possible transformation used for getting image2 from image 1 are as 
 
 
 This is jupyter notebook [notebook](problem1.1/transformation.ipynb) for solution of this problem.
+
 Problem 1.2
 -------------------------
 
 The following images are produced by a thermal camera, please find an appropriate way to eliminate the distortion created by the camera.
+
 ![Alt text](img/temp.jpg) 
 
 To remove the distortion for these images created by thermal camera we need to do perspective correction for each of them.
