@@ -79,7 +79,9 @@ Problem 2 needs multiple AI models. Basically we need models for
 * `Eye Gaze Detection and Tracking`
 * `Emotion Detection` (classification Model)
 * `Liveliness Detection` (Classification Model)
+
 ![](img/face_detection.jpg)
+
 For each of the above models, the base task is face detection. Once we detect a face we can pass it to each of the downstream task. So we can use a single model for face detection and pass it to each of the downstream task.
 There are a lot of open source model for face detection (`MTCNN`, `RetinaFace` etc.) with a good accuracy. For the simplicity of the project and to run the system in near real time using laptop camera I used face detection using `Haar Cascades` from opencv. 
 
