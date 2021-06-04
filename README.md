@@ -41,6 +41,19 @@ In perspective correction a source image is transformed into a desired perspecti
 
 In this example, all the images are captured by a thermal camera and distorted. So we need a reference checkerboard image and need to transform each of the example images using homography.
  
+I have used a reference checkerboard as the following image. Then find corners from both input and reference checkerboard images using OpenCV findChessboardCorners(). Find homography using corners detected from both of the images and finally use wrapPerspective() to map the input_image to the reference images. 
+
+![Alt text](problem1.2/reference.jpeg) 
+
+------
+    ret1, corners_inp = cv.findChessboardCorners(input_image, patternSize)
+    ret2, corners_ref = cv.findChessboardCorners(ref_image, patternSize)
+    
+    H, _ = cv.findHomography(corners_inp, corners_ref)
+    
+    input_image_warp = cv.warpPerspective(input_image, H, (input_image.shape[1], input_image.shape[0]))
+
+This is a jupyter notebook [notebook](problem1.2/perspective%20transformation.ipynb) for solution of this problem.
 
 Problem 2
 -----------------------------------------
