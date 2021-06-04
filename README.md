@@ -2,64 +2,74 @@
 YOZO-Games
 ========
 
-Organize your Mac filesystem.
-
-Huh?
-----
-
-Organize helps you stay organized on your Mac. It sets up a very simple project
-management system that works for me (maybe not you).
+This git repository contains solution for each of the problems from YOZO games. 
 
 Install
 -------
 
-    $ gem install organize
-    $ organize install
+    $ pip install -r requirements.txt
 
-Now you can create some projects!
+    
+Problem 1.1
+----
 
-    $ organize create FOSS
-    $ organize create Social
-    $ organize create Freelance
-    $ organize create ElDorado
+Find a suitable way to transform image1 to image 2 
 
-What does this do for me?
+(hints: contrast and transformation)
+
+
+Image 1             |  Image 2
+:-------------------------:|:-------------------------:
+![Alt text](img/1.jpg "Image 1")  |  ![Alt text](img/2.jpg? "Image 2")
+
+I think the possible transformation used for getting image2 from image 1 are as follow
+
+    1. Contrast Enhancement 
+    2. Perspective Correction/Transformation
+    3. Cropping/Zooming
+
+Problem 1.2
 -------------------------
 
-Organize will create a folder in your home directory called Projects. Inside of
-this folder you can place all of your projects. If you've ever used
-[Things](http://culturedcode.com/things/) by CulturedCode, think of these
-projects like Areas of Responsibility. These are *large* goals in your life that
-won't be completed for a couple months or will never be completed. Don't make
-too many of them. I usually have around 13 or so.
+The following images are produced by a thermal camera, please find an appropriate way to eliminate the distortion created by the camera.
+![Alt text](img/temp.jpg) 
 
-Inside of each project folder, there is a single Shared folder created for you
-automatically. The Shared folder links to a folder in your
-[Dropbox](http://www.dropbox.com/) of the same name as the project. Anything
-that you'd like to share across multiple computers should be placed in here.
+To remove the distortion for these images created by thermal camera we need to do perspective correction for each of them.
 
-Organize also creates a couple other folders. The Archive folder located in the
-root of the Projects folder are for old projects that you've completed but would
-like to still have the file around, just in case something bad happens. The
-Inbox folder is a symlink to your Desktop. This folder and its corresponding
-Shared folder are for things that you're either too lazy to fit into another
-folder or are very temporary things that you'll never need for more than 5 or
-ten minutes. Keep your desktop down to 5 or 6 items at all times.
+#### Perspective Correction
+In perspective correction a source image is transformed into a desired perspective view by computing the homography that maps the source points into the desired points. 
 
-The Other folder links your various home folder sections (like Documents,
-Movies, Music, etc.) that don't quite fit into the organization system. The only
-things that should go in these folders are resources which transcend the
-projects. Your iTunes folder is a prime example, along with [Parallels
-VMs](http://www.parallels.com/products/desktop/) and movies you've downloaded.
-This folder also has a Shared folder for things like your
-[1Password](http://agilewebsolutions.com/products/1Password) keychain.
+In this example, all the images are captured by a thermal camera and distorted. So we need a reference checkerboard image and need to transform each of the example images using homography.
+ 
 
-That's it.
-
-Awesome! How can I make this even cooler?
+Problem 2
 -----------------------------------------
+Develop a system that can track eye gaze, emotion, and faces from a video source near real time. The system should distinguish between real faces and faces from photos.  
 
-You can make your life easier by adding a simple little function to your zsh.
+##### Tasks and requirements:
+* Based on existing techniques, build a system that can track eye gaze and human facial emotion.
+* Backend will take the webcam or integrated camera from laptop as input source.
+* Backend should be able to handle the detection task while displaying the video source from the frontend.
+* Backend should be able to handle eye gaze tracking showing where the eyes are focusing on the screen in the frontend.
+* Emotions should include at least 6 out of Neutral, Anger, Surprise, Sleepy, Boredom, Fearful, Distressed, Frustration, Happy, Excited, Sadness, Relax.
+* Frontend should show detected face(s), expressions, and detected emotions clearly.
+* Frontend should distinguish between a real face and face from a photo.
+* Accuracy is not main consideration for this task.
+
+##### Solution
+Problem 2 needs multiple AI models. Basically we need models for
+* `Eye Gaze Detection and Tracking`
+* `Emotion Detection` (classification Model)
+* `Liveliness Detection` (Classification Model)
+
+For each of the above models, the base task is face detection. Once we detect a face we can pass it to each of the downstream task. So we can use a single model for face detection and pass it to each of the downstream task.
+There are a lot of open source model for face detection (`MTCNN`, `RetinaFace` etc.) with a good accuracy. For the simplicity of the project and to run the system in near real time using laptop camera I used face detection using `Haar Cascades` from opencv. 
+
+
+
+![](img/1.gif)
+![](img/face_detection.jpg)
+
 
     cd ~/Projects/$1;
 
@@ -73,21 +83,6 @@ You can even make it autocomplete!
 
     #compdef p
     _files -W ~/Projects -/
-
-Crazy!
-
-Just as a small cosmetic enhancement, I like using the icon of the Utilities
-folder for my Projects folder. It kinda make it fit in more when viewed in the
-Finder.
-
-Note on Patches/Pull Requests
------------------------------
-
- * Fork the project.
- * Make your feature addition or bug fix.
- * Add tests for it. This is important so I don’t break it in a future version unintentionally.
- * Commit, do not mess with rakefile, version, or history. (if you want to have your own version, that is fine but bump version in a commit by itself in another branch so I can ignore when I pull)
- * Send me a pull request. Bonus points for topic branches.
 
 Copyright
 ---------
