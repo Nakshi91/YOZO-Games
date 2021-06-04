@@ -1,4 +1,11 @@
-# utility file for emotion recognition from realtime webcam feed
+__author__ = "Enakshi Jana"
+__copyright__ = ""
+__license__ = "MIT"
+__version__ = "1.0.1"
+__maintainer__ = "Enakshi Jana"
+__email__ = "enu.13jana@gmail.com"
+__status__ = "Production"
+
 import cv2
 import sys
 from keras.models import load_model
@@ -7,21 +14,12 @@ import numpy as np
 from decimal import Decimal
 from model_utils import define_model, model_weights
 from gaze_tracking import GazeTracking
-
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
 import numpy as np
 import os,cv2
 
-## LIVENESS
 live_model = load_model("livenessdetect/models/anandfinal.hdf5")
-## LIVENESS
-
-# loads and resizes an image
-def resize_img(image_path):
-    img = cv2.imread(image_path, 1)
-    img = cv2.resize(img, (48, 48))
-    return True
 
 # runs the realtime emotion detection 
 def realtime_emotions():
@@ -30,7 +28,6 @@ def realtime_emotions():
     model = define_model()
     model = model_weights(model)
     print('Model loaded')
-
     # save location for image
     save_loc = 'save_loc/1.jpg'
     # numpy matrix for stroing prediction
@@ -41,7 +38,6 @@ def realtime_emotions():
     faceCascade = cv2.CascadeClassifier(r'haarcascades/haarcascade_frontalface_default.xml')
     # list of given emotions
     EMOTIONS = ['Angry', 'Disgusted', 'Fearful', 'Happy', 'Sad', 'Surprised', 'Neutral']
-
     # store the emoji coreesponding to different emotions
     emoji_faces = []
     for index, emotion in enumerate(EMOTIONS):
@@ -51,7 +47,6 @@ def realtime_emotions():
     video_capture = cv2.VideoCapture(0)
     video_capture.set(3, 840)  # WIDTH
     video_capture.set(4, 880)  # HEIGHT
-
     # save current time
     prev_time = time.time()
 
@@ -62,12 +57,6 @@ def realtime_emotions():
         # mirror the frame
         frame = cv2.flip(frame, 1, 0)
 
-
-
-
-
-
-        ########## FOR LIVENESS DETECTION ########
         try:
             image = cv2.resize(frame, (128, 128))
             image = image.astype("float") / 255.0
@@ -83,11 +72,6 @@ def realtime_emotions():
                 label = "real"
         except:
             continue
-
-
-
-
-        ###### EMOTION ######
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         except Exception as E:
@@ -127,14 +111,12 @@ def realtime_emotions():
                 if img is not None:
                     # indicates that prediction has been done atleast once
                     once = True
-
                     # resize image for the model
                     img = cv2.resize(img, (48, 48))
                     img = np.reshape(img, (1, 48, 48, 1))
                     # do prediction
                     result = model.predict(img)
                     print(EMOTIONS[np.argmax(result[0])])
-
                 #save the time when the last face recognition task was done
                 prev_time = time.time()
 
@@ -155,7 +137,6 @@ def realtime_emotions():
                     cv2.putText(frame, text, (105 + int(result[0][index] * 100), index * 20 + 20),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
 
-
                 # overlay emoji on the frame for all the channels
                 for c in range(0, 3):
                     # for doing overlay we need to assign weights to both foreground and background
@@ -164,19 +145,9 @@ def realtime_emotions():
                     frame[350:470, 10:130, c] = foreground + background
             break
 
-
-
-
-
-
-
-        ############FOR EYE GAZE ##############
-
         face = gaze.refresh(frame)
-
         frame = gaze.annotated_frame()
         text = ""
-
         if gaze.is_blinking():
             text = "Blinking"
         elif gaze.is_right():
@@ -185,33 +156,17 @@ def realtime_emotions():
             text = "Looking left"
         elif gaze.is_center():
             text = "Looking center"
-
         cv2.putText(frame, text, (990, 60), cv2.FONT_HERSHEY_DUPLEX, 0.7, (147, 58, 31), 2)
-
         left_pupil = gaze.pupil_left_coords()
         right_pupil = gaze.pupil_right_coords()
         cv2.putText(frame, "Left pupil:  " + str(left_pupil), (990, 130), cv2.FONT_HERSHEY_DUPLEX, 0.7, (147, 58, 31), 1)
         cv2.putText(frame, "Right pupil: " + str(right_pupil), (990, 165), cv2.FONT_HERSHEY_DUPLEX, 0.7, (147, 58, 31),1)
-
         cv2.putText(frame, label, (510, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-
-        # if face is not None:
-        #     x1 = face.left()
-        #     y1 = face.top()
-        #     x2 = face.right()
-        #     y2 = face.bottom()
-        #     cv2.rectangle(frame, (x1, y1), (x2, y2), color=(0, 255, 0), thickness=3)
-
-
-
-
-
 
         # Display the resulting frame
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
     # When everything is done, release the capture
     video_capture.release()
     cv2.destroyAllWindows()
